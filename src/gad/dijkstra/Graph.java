@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Graph {
 	public static final class Node {
-		private int id;
+		private final int id;
 		private ArrayList<Node> neighbours;
 		private ArrayList<Edge> edges;
 
@@ -29,7 +29,7 @@ public class Graph {
 		}
 
 		public Collection<Node> getNeighbours() {
-			return neighbours;
+			return List.copyOf(neighbours);
 		}
 
 		public Collection<Edge> getEdges() {
@@ -40,15 +40,19 @@ public class Graph {
 			if (!neighbours.contains(neighbour)) {
 				throw new IllegalArgumentException();
 			} else {
-				return edges.get(0).weight;
+				for (Edge edge : edges) {
+					if (edge.getTo() == neighbour.getID()) {
+						return edge.weight;
+					}
+				}
 			}
+			return 0;
 		}
 	}
 
 	public static final class Edge {
-
-		private int to;
-		private int weight;
+		private final int to;
+		private final int weight;
 		public Edge(int to, int weight) {
 			this.to = to;
 			this.weight = weight;
@@ -61,29 +65,22 @@ public class Graph {
 		public int getWeight() {
 			return weight;
 		}
-
-		public void setTo(int to) {
-			this.to = to;
-		}
-
-		public void setWeight(int weight) {
-			this.weight = weight;
-		}
 	}
 
-	private ArrayList<Node> nodes;
+
+
+	private HashMap<Integer, Node> nodes;
 	private int id;
 
 	public Graph() {
-		nodes = new ArrayList<>();
+		nodes = new HashMap<>();
 		this.id = 0;
 	}
 
 	public int addNode() {
 		Node node = new Node(id);
+		nodes.put(node.getID(), node);
 		id++;
-		nodes.add(node);
-		nodes.sort(Comparator.comparing(Node::getID));
 		return node.getID();
 	}
 
@@ -96,7 +93,7 @@ public class Graph {
 	}
 
 	public Collection<Node> getAllNodes() {
-		return nodes;
+		return List.copyOf(nodes.values());
 	}
 
 	public void addEdge(int from, int to, int weight) {
