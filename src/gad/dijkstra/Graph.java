@@ -19,8 +19,10 @@ public class Graph {
 		}
 
 		public void addNeighbour(Node neighbour) {
-			neighbours.add(neighbour);
-			neighbours.sort(Comparator.comparing(Node::getID));
+			if (!neighbours.contains(neighbour)) {
+				neighbours.add(neighbour);
+				neighbours.sort(Comparator.comparing(Node::getID));
+			}
 		}
 
 		public void addEdge(Edge edge) {
