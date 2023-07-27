@@ -37,19 +37,6 @@ public class Graph {
 			return edges;
 		}
 
-		public Node getNeighbour (int id) {
-			if (!neighbours.contains(id)) {
-				return null;
-			} else {
-				for (Node neighbour : neighbours) {
-					if (neighbour.id == id) {
-						return neighbour;
-					}
-				}
-			}
-			return null;
-		}
-
 		public int getShortestDistanceToNeighbour(Node neighbour) {
 			if (!neighbours.contains(neighbour)) {
 				throw new IllegalArgumentException();
