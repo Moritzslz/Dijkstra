@@ -6,7 +6,7 @@ public class Graph {
 	public static final class Node {
 		private final int id;
 		private ArrayList<Node> neighbours;
-		private PriorityQueue<Edge> edges;
+		public PriorityQueue<Edge> edges;
 
 		public Node(int id) {
 			this.id = id;
@@ -35,6 +35,19 @@ public class Graph {
 
 		public Collection<Edge> getEdges() {
 			return edges;
+		}
+
+		public Node getNeighbour (int id) {
+			if (!neighbours.contains(id)) {
+				throw new IllegalArgumentException("No neighbour with this id");
+			} else {
+				for (Node neighbour : neighbours) {
+					if (neighbour.id == id) {
+						return neighbour;
+					}
+				}
+			}
+			return null;
 		}
 
 		public int getShortestDistanceToNeighbour(Node neighbour) {
