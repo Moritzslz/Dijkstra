@@ -15,7 +15,7 @@ public class Dijkstra {
 
 	public Dijkstra() {
 		this.visited = new ArrayList<>();
-		this.queue = new PriorityQueue();
+		this.queue = new PriorityQueue(new NodeComparator());
 		this.shortestPath = new ArrayList();
 		this.distances = new HashMap<>();
 		this.previous = new HashMap<>();
@@ -77,6 +77,7 @@ public class Dijkstra {
 	public int getShortestPathLength() {
 		return shortestPathLength;
 	}
+
 	public static void main(String[] args) {
 		// Create a graph and add nodes and edges
 		Graph graph = new Graph();
@@ -103,5 +104,13 @@ public class Dijkstra {
 		// Print the result
 		System.out.println("Shortest Path: " + Arrays.toString(shortestPath.toArray()));
 		System.out.println("Shortest Path Length: " + shortestPathLength);
+	}
+
+	private class NodeComparator implements Comparator<Node> {
+		@Override
+		public int compare(Node node1, Node node2) {
+			return Integer.compare(distances.getOrDefault(node1, Integer.MAX_VALUE),
+					distances.getOrDefault(node2, Integer.MAX_VALUE));
+		}
 	}
 }
