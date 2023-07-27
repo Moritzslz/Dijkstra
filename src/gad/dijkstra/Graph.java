@@ -39,7 +39,7 @@ public class Graph {
 
 		public Node getNeighbour (int id) {
 			if (!neighbours.contains(id)) {
-				throw new IllegalArgumentException("No neighbour with this id");
+				return null;
 			} else {
 				for (Node neighbour : neighbours) {
 					if (neighbour.id == id) {

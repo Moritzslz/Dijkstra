@@ -34,6 +34,9 @@ public class Dijkstra {
 
 			Graph.Edge edge = current.edges.poll();
 			Node neighbour = current.getNeighbour(edge.getTo());
+			if (neighbour == null) {
+				break;
+			}
 			visited.add(current);
 			shortestPath.add(current);
 			distance += edge.getWeight();
