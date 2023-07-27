@@ -6,7 +6,7 @@ public class Graph {
 	public static final class Node {
 		private final int id;
 		private ArrayList<Node> neighbours;
-		public PriorityQueue<Edge> edges;
+		private PriorityQueue<Edge> edges;
 
 		public Node(int id) {
 			this.id = id;
