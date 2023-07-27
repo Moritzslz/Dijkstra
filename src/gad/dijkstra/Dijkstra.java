@@ -57,9 +57,9 @@ public class Dijkstra {
 			}
 		}
 
-		if (!visited.contains(goal)) {
+		/*if (!visited.contains(goal)) {
 			throw new RuntimeException("Goal node is not reachable from the start node.");
-		}
+		}*/
 
 		shortestPathLength = distances.get(goal);
 
