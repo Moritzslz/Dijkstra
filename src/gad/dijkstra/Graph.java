@@ -6,12 +6,12 @@ public class Graph {
 	public static final class Node {
 		private final int id;
 		private ArrayList<Node> neighbours;
-		private ArrayList<Edge> edges;
+		private PriorityQueue<Edge> edges;
 
 		public Node(int id) {
 			this.id = id;
 			this.neighbours = new ArrayList<>();
-			this.edges = new ArrayList<>();
+			this.edges = new PriorityQueue<>(Comparator.comparingInt(Edge::getWeight));
 		}
 
 		public int getID() {
@@ -27,7 +27,6 @@ public class Graph {
 
 		public void addEdge(Edge edge) {
 			edges.add(edge);
-			edges.sort(Comparator.comparing(Edge::getWeight));
 		}
 
 		public Collection<Node> getNeighbours() {
