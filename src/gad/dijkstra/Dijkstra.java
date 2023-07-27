@@ -1,59 +1,70 @@
 package gad.dijkstra;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import gad.dijkstra.Graph.Node;
 
 public class Dijkstra {
 
 	ArrayList<Node> visited;
-	ArrayList<Node> shortestPath;
-	int distance;
+	PriorityQueue<Node> queue;
+	ArrayList shortestPath;
+	HashMap<Node, Integer> distances;
+	int shortestPathLength;
 
 	public Dijkstra() {
 		this.visited = new ArrayList<>();
-		this.shortestPath = new ArrayList<>();
-		distance = 0;
+		this.queue = new PriorityQueue<>();
+		this.shortestPath = new ArrayList();
+		this.distances = new HashMap<>();
+		this.shortestPathLength = 0;
 	}
 
 	public void findRoute(Graph g, Node start, Node goal, Result result) {
-		Node current  = start;
-		Node previous = null;
-		while (!current.edges.isEmpty()) {
-			result.addNode(current.getID(), distance);
-			ArrayList<Integer> neighbourIds = new ArrayList<>();
-			for (Node neighbour : current.getNeighbours()) {
-				neighbourIds.add(neighbour.getID());
-			}
-			result.addNeighbours(neighbourIds);
 
-			if (current == goal) {
+		Node current = start;
+		distances.put(current, 0);
+
+		while (!queue.isEmpty()) {
+			List<Node> neighbours = List.copyOf(current.getNeighbours());
+			List<Integer> ids = new ArrayList<>();
+			for (Node neighbour : neighbours) {
+				ids.add(neighbour.getID());
+			}
+
+			result.addNode(current.getID(), distances.get(current));
+			result.addNeighbours(ids);
+
+			shortestPath.add(current);
+
+			if (current.equals(goal)) {
 				break;
 			}
 
-			Graph.Edge edge = current.edges.poll();
-			Node neighbour = g.getNode(edge.getTo());
 			visited.add(current);
-			shortestPath.add(current);
-			distance += edge.getWeight();
 
-			previous = current;
-			current = neighbour;
+			while (!current.edges.isEmpty()) {
+				Graph.Edge edge = current.edges.poll();
+				Node neighbour = g.getNode(edge.getTo());
+				distances.put(neighbour, distances.get(current) + edge.getWeight());
+				queue.add(g.getNode(edge.getTo()));
+			}
 
-			if (current.edges.isEmpty() && !previous.edges.isEmpty()) {
-				shortestPath.remove(current);
-				distance -= edge.getWeight();
-				current = previous;
+			current = queue.poll();
+
+			if (visited.contains(current) && !queue.isEmpty()) {
+				queue.poll();
+			} else {
+				throw new RuntimeException();
 			}
 		}
 
 		if (!current.equals(goal)) {
-			shortestPath = null;
-			distance = 0;
 			throw new RuntimeException();
 		}
+
+		shortestPathLength = distances.get(goal);
+
 		getShortestPath();
 		getShortestPathLength();
 	}
@@ -63,7 +74,7 @@ public class Dijkstra {
 	}
 
 	public int getShortestPathLength() {
-		return distance;
+		return shortestPathLength;
 	}
 	public static void main(String[] args) {
 		// Create a graph and add nodes and edges
